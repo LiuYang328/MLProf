@@ -1,3 +1,7 @@
+#ifndef ML_PROFILER_PROFILER_H
+#define ML_PROFILER_PROFILER_H
+
+
 #include "mlir/Dialect/Bufferization/Transforms/Passes.h"
 #include "mlir/Dialect/Linalg/Passes.h"
 #include "mlir/IR/Dialect.h"
@@ -15,8 +19,6 @@
 #include "llvm/Support/SourceMgr.h"
 #include "llvm/Support/ToolOutputFile.h"
 
-
-#include "TimeManager.h"
 #include <cstdint>
 #include <dlfcn.h> // for dlopen, dlsym, dlclose
 #include <filesystem>
@@ -25,6 +27,10 @@
 #include <string>
 #include <string_view>
 #include <thread>
+
+#include "ml_profiler/TimeManager.h"
+
+
 
 
 class Profiler {
@@ -35,7 +41,10 @@ public:
     mlir::DialectRegistry registry;
     // Register all MLIR core dialects.
     mlir::registerAllDialects(registry);
-    mlir::registerAllExtensions(registry);
+    context.appendDialectRegistry(registry);
+    // mlir::registerAllExtensions(registry);
+
+    /*--Register dialects in custom project.--*/
 
     // registry.insert<bud::BudDialect,
     //                 trace::TraceDialect,
@@ -46,7 +55,7 @@ public:
     //                 gemmini::GemminiDialect,
     //                 sche::ScheDialect>();
 
-    context.appendDialectRegistry(registry);
+    // context.appendDialectRegistry(registry);
 
     /* init TimeManager */
     if (!timeManager) {
@@ -63,7 +72,7 @@ public:
   template <typename Func>
   Func loadLib(const std::string &libpath, const std::string &funcName) {
 
-    //Invoke the dynamic link library
+    // Invoke the dynamic link library
     void *handle =
         dlopen(libpath.c_str(), RTLD_LAZY | RTLD_GLOBAL); // invoke .so lib
     if (!handle) {
@@ -83,9 +92,9 @@ public:
     return fptr;
   }
 
-  void outputResult(const std::string &resultFilepath) {
-    timeManager->processTimingData(resultFilepath);
-  }
+  // void outputResult(const std::string &resultFilepath) {
+  //   timeManager->processTimingData(resultFilepath);
+  // }
 
   static TimeManager &getTimeManager() { return *timeManager; }
 
@@ -101,3 +110,6 @@ private:
 
   static std::unique_ptr<TimeManager> timeManager;
 };
+
+
+#endif // ML_PROFILER_PROFILER_H
