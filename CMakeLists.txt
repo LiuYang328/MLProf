@@ -35,14 +35,10 @@ include_directories(${MLIR_INCLUDE_DIRS})
 
 add_executable(profiler-main main.cpp)
 
+
+# find MLIR libraries
 get_property(dialect_libs GLOBAL PROPERTY MLIR_DIALECT_LIBS)
 get_property(conversion_libs GLOBAL PROPERTY MLIR_CONVERSION_LIBS)
-
-target_link_libraries(profiler-main
-    PUBLIC
-    ${dialect_libs}
-    ${conversion_libs}
-)
 
 add_subdirectory(examples)
 add_subdirectory(src)
@@ -54,4 +50,6 @@ target_link_libraries(profiler-main
     ProfilerRuntime
     mlir_runner_utils
     mlir_c_runner_utils
+    ${dialect_libs}
+    ${conversion_libs}
 )

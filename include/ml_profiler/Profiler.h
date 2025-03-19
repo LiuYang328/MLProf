@@ -31,12 +31,18 @@
 #include "ml_profiler/TimeManager.h"
 
 
+extern "C" void _mlir_ciface_timingStart(uint64_t);
+
+extern "C" void _mlir_ciface_timingEnd(uint64_t);
+
+extern "C" void _mlir_ciface_printtest() ;
+
 
 
 class Profiler {
 
 public:
-  Profiler(std::filesystem::path mlirFilePath) : mlirFilePath(mlirFilePath) {
+  Profiler() {
     /* init MLIRContext */
     mlir::DialectRegistry registry;
     // Register all MLIR core dialects.
@@ -106,10 +112,13 @@ private:
 private:
   mlir::MLIRContext context;
 
-  std::filesystem::path mlirFilePath;
+  // std::filesystem::path mlirFilePath;
 
   static std::unique_ptr<TimeManager> timeManager;
 };
+
+
+
 
 
 #endif // ML_PROFILER_PROFILER_H

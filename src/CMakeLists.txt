@@ -1,4 +1,4 @@
-add_library(ProfilerRuntime SHARED Profiler.cpp TimeEvent.cpp TimeManager.cpp ) 
+add_library(ProfilerRuntime SHARED TimeManager.cpp  Profiler.cpp TimeEvent.cpp ) 
 
 
 target_include_directories(ProfilerRuntime PUBLIC ${PROJECT_SOURCE_DIR}/include)

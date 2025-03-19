@@ -29,7 +29,6 @@ std::string Profiler::instrument(const std::string &targetDialect) {
 
     printf("Matched op: %s\n", op->getName().getStringRef().str().c_str());
 
-
     builder.setInsertionPoint(op);
     auto constantOp = builder.create<mlir::arith::ConstantOp>(
       op->getLoc(), builder.getI64IntegerAttr(42));
@@ -58,3 +57,21 @@ std::string Profiler::instrument(const std::string &targetDialect) {
   moduleOp->dump();
   return "";
 }
+
+
+
+void _mlir_ciface_timingStart(uint64_t ptr) {
+  // Profiler::getTimeManager().timingStart(reinterpret_cast<TimeEvent *>(ptr));
+}
+
+void _mlir_ciface_timingEnd(uint64_t ptr) {
+  // Profiler::getTimeManager().timingEnd(reinterpret_cast<TimeEvent *>(ptr));
+}
+
+
+void  _mlir_ciface_printtest() {
+  std::cout << "print test" << std::endl;
+}
+
+
+std::unique_ptr<TimeManager> Profiler::timeManager = nullptr;
