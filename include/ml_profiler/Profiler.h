@@ -119,6 +119,4 @@ private:
 
 
 
-
-
 #endif // ML_PROFILER_PROFILER_H

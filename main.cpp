@@ -1,5 +1,8 @@
 // #include "mlir/IR/AsmState.h"
+#include "Dialect/profiling/profilingDialect.h"
+#include "Dialect/profiling/profilingOps.h"
 #include "ml_profiler/Profiler.h"
+#include "mlir/Debug/BreakpointManager.h"
 #include "mlir/Dialect/Arith/IR/Arith.h"
 #include "mlir/Dialect/Func/IR/FuncOps.h"
 #include "mlir/Dialect/Linalg/IR/Linalg.h"
@@ -21,6 +24,46 @@
 
 using namespace mlir;
 
+void visitOperation(Operation *op) {
+  // 打印当前操作的信息
+  std::cout << "visiting op: '" << op->getName().getStringRef().str()
+            << "' with " << op->getNumOperands() << " operands and "
+            << op->getNumResults() << " results\n";
+
+  // 递归遍历所有子操作（通过regions和blocks）
+  for (Region &region : op->getRegions()) {
+    for (Block &block : region) {
+      for (Operation &subOp : block) {
+        visitOperation(&subOp); // 递归处理每个子操作
+      }
+    }
+  }
+}
+
+void insertSurroundingOps(Operation *rootOp) {
+  // 后序遍历所有子操作，避免修改父操作影响迭代器
+  rootOp->walk([&](Operation *currentOp) {
+    // 跳过顶层 module 操作（可选）
+    if (currentOp->getName().getStringRef() == "builtin.module")
+      return;
+
+    OpBuilder builder(currentOp);
+
+    // 在目标操作前插入 PRE_OP
+    builder.setInsertionPoint(currentOp);
+    OperationState preState(currentOp->getLoc(), "your_dialect.pre_op");
+    Operation *preOp = builder.create(preState);
+
+    // 在目标操作后插入 POST_OP
+    builder.setInsertionPointAfter(currentOp);
+    OperationState postState(currentOp->getLoc(), "your_dialect.post_op");
+    Operation *postOp = builder.create(postState);
+
+    // （可选）建立操作间的数据流关系
+    // postOp->setOperand(0, currentOp->getResult(0));
+  });
+}
+
 int main(int argc, char **argv) {
 
   mlir::DialectRegistry registry;
@@ -29,27 +72,20 @@ int main(int argc, char **argv) {
   mlir::registerAllDialects(registry);
 
   // 用注册表初始化 MLIRContext，所有注册的 dialect 都会被载入
-  mlir::MLIRContext ctx(registry);
+  mlir::MLIRContext context(registry);
+  context.allowUnregisteredDialects(true);
 
   // 读入文件
-  auto src = parseSourceFile<ModuleOp>(argv[1], &ctx);
-  // 输出dialect，也可以输出到 llvm::errs(), llvm::dbgs()
-  // src->print(llvm::outs());
-  // // 简单的输出，在 debug 的时候常用
-  // src->dump();
-  Operation *op = src->getOperation();
-  std::cout << "Operation name: " << op->getName().getStringRef().str()
-            << std::endl;
+  // auto src = parseSourceFile<ModuleOp>(argv[1], &ctx);
 
-            std::cout << "visiting op: '" << op->getName().getStringRef().str() << "' with "
-                << op->getNumOperands() << " operands and "
-                << op->getNumResults() << " results\n";
-  // Print the operation attributes
-  if (!op->getAttrs().empty()) {
-    std::cout << op->getAttrs().size() << " attributes:\n";
-    for (NamedAttribute attr : op->getAttrs())
-      std::cout << " - '" << attr.getName().str()<< "' : '"<< "'\n";
-  }
+  // src->dump();
+
+  // 在main中调用
+  // Operation *root = src->getOperation(); // 获取顶层module操作
+  // visitOperation(root);
+
+  // insertSurroundingOps(root);
+
   // Profiler profiler;
 
   // profiler.instrument("linalg");
@@ -59,6 +95,56 @@ int main(int argc, char **argv) {
   // 构造并执行 Pass 管线。
 
   // 与性能计数（硬件及软件）的上层模块解耦。
+
+  std::cout << "instrument" << std::endl;
+  // auto moduleOp = module.get();
+  // auto src = parseSourceFile<ModuleOp>(argv[1], &ctx);
+  std::string mlirFilePath = "/root/myproject/MLIR-Profiler/MLProfiler/"
+                             "examples/matmul-test/matmul-with-time.mlir";
+
+  auto moduleOp = mlir::parseSourceFile<mlir::ModuleOp>(mlirFilePath, &context);
+  // 提取并执行对目标方言操作的处理逻辑
+
+  mlir::OpBuilder builder(&context);
+
+  std::cout << "start walk" << std::endl;
+
+  // 遍历模块中的所有函数
+  mlir::Operation *op = moduleOp->getOperation();
+
+  // builder.create<mlir::toy::FuncOp>(location, proto.getName(), funcType);
+
+  // std::cout << "start walk" << std::endl;
+
+  // // 遍历模块中的所有函数
+  // moduleOp->walk([&](mlir::Operation *op) {
+  //   // 遍历函数体中每个操作
+
+  //   printf("Matched op: %s\n", op->getName().getStringRef().str().c_str());
+
+  //   builder.setInsertionPoint(op);
+  //   auto constantOp = builder.create<mlir::arith::ConstantOp>(
+  //       op->getLoc(), builder.getI64IntegerAttr(42));
+
+
+  // });
+  context.getOrLoadDialect<profiling::ProfilingDialect>();
+
+  moduleOp->walk([&](linalg::LinalgOp linalgOp) {
+    // 遍历函数体中每个操作
+
+    printf("Matched op: %s\n", linalgOp->getName().getStringRef().str().c_str());
+
+    builder.setInsertionPoint(linalgOp);
+    auto constantOp = builder.create<profiling::StartOp>(
+      linalgOp->getLoc());
+
+    linalgOp->dump();
+
+  });
+
+  
+  moduleOp->dump();
 
   return 0;
 }

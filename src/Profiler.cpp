@@ -14,7 +14,7 @@ std::string Profiler::instrument(const std::string &targetDialect) {
   // auto moduleOp = module.get();
   // auto src = parseSourceFile<ModuleOp>(argv[1], &ctx);
   std::string mlirFilePath =
-      "/root/myproject/MLIR-Profiler/MLProfiler/examples/matmul-vs-matvec.mlir";
+      "/root/myproject/MLIR-Profiler/MLProfiler/examples/matmul-test/matmul-with-time.mlir";
 
   auto moduleOp = mlir::parseSourceFile<mlir::ModuleOp>(mlirFilePath, &context);
   // 提取并执行对目标方言操作的处理逻辑
@@ -69,7 +69,7 @@ void _mlir_ciface_timingEnd(uint64_t ptr) {
 }
 
 
-void  _mlir_ciface_printtest() {
+extern "C" void  _mlir_ciface_printtest() {
   std::cout << "print test" << std::endl;
 }
 

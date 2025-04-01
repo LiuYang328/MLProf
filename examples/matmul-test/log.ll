@@ -11,7 +11,23 @@ declare void @free(ptr)
 
 declare ptr @malloc(i64)
 
-declare void @printMemrefF32(i64, ptr)
+define private void @printMemrefF32(i64 %0, ptr %1) {
+  %3 = insertvalue { i64, ptr } undef, i64 %0, 0
+  %4 = insertvalue { i64, ptr } %3, ptr %1, 1
+  %5 = alloca { i64, ptr }, i64 1, align 8
+  store { i64, ptr } %4, ptr %5, align 8
+  call void @_mlir_ciface_printMemrefF32(ptr %5)
+  ret void
+}
+
+declare void @_mlir_ciface_printMemrefF32(ptr)
+
+define private void @printtest() {
+  call void @_mlir_ciface_printtest()
+  ret void
+}
+
+declare void @_mlir_ciface_printtest()
 
 define { ptr, ptr, i64, [2 x i64], [2 x i64] } @matmul(ptr %0, ptr %1, i64 %2, i64 %3, i64 %4, i64 %5, i64 %6, ptr %7, ptr %8, i64 %9, i64 %10, i64 %11, i64 %12, i64 %13) {
   %15 = insertvalue { ptr, ptr, i64, [2 x i64], [2 x i64] } undef, ptr %7, 0
@@ -157,6 +173,28 @@ define { ptr, ptr, i64, [2 x i64], [2 x i64] } @matmul(ptr %0, ptr %1, i64 %2, i
 
 119:                                              ; preds = %77
   ret { ptr, ptr, i64, [2 x i64], [2 x i64] } %47
+}
+
+define void @_mlir_ciface_matmul(ptr %0, ptr %1, ptr %2) {
+  %4 = load { ptr, ptr, i64, [2 x i64], [2 x i64] }, ptr %1, align 8
+  %5 = extractvalue { ptr, ptr, i64, [2 x i64], [2 x i64] } %4, 0
+  %6 = extractvalue { ptr, ptr, i64, [2 x i64], [2 x i64] } %4, 1
+  %7 = extractvalue { ptr, ptr, i64, [2 x i64], [2 x i64] } %4, 2
+  %8 = extractvalue { ptr, ptr, i64, [2 x i64], [2 x i64] } %4, 3, 0
+  %9 = extractvalue { ptr, ptr, i64, [2 x i64], [2 x i64] } %4, 3, 1
+  %10 = extractvalue { ptr, ptr, i64, [2 x i64], [2 x i64] } %4, 4, 0
+  %11 = extractvalue { ptr, ptr, i64, [2 x i64], [2 x i64] } %4, 4, 1
+  %12 = load { ptr, ptr, i64, [2 x i64], [2 x i64] }, ptr %2, align 8
+  %13 = extractvalue { ptr, ptr, i64, [2 x i64], [2 x i64] } %12, 0
+  %14 = extractvalue { ptr, ptr, i64, [2 x i64], [2 x i64] } %12, 1
+  %15 = extractvalue { ptr, ptr, i64, [2 x i64], [2 x i64] } %12, 2
+  %16 = extractvalue { ptr, ptr, i64, [2 x i64], [2 x i64] } %12, 3, 0
+  %17 = extractvalue { ptr, ptr, i64, [2 x i64], [2 x i64] } %12, 3, 1
+  %18 = extractvalue { ptr, ptr, i64, [2 x i64], [2 x i64] } %12, 4, 0
+  %19 = extractvalue { ptr, ptr, i64, [2 x i64], [2 x i64] } %12, 4, 1
+  %20 = call { ptr, ptr, i64, [2 x i64], [2 x i64] } @matmul(ptr %5, ptr %6, i64 %7, i64 %8, i64 %9, i64 %10, i64 %11, ptr %13, ptr %14, i64 %15, i64 %16, i64 %17, i64 %18, i64 %19)
+  store { ptr, ptr, i64, [2 x i64], [2 x i64] } %20, ptr %0, align 8
+  ret void
 }
 
 define { ptr, ptr, i64, [2 x i64], [2 x i64] } @matvec(ptr %0, ptr %1, i64 %2, i64 %3, i64 %4, i64 %5, i64 %6, ptr %7, ptr %8, i64 %9, i64 %10, i64 %11, i64 %12, i64 %13) {
@@ -332,7 +370,30 @@ define { ptr, ptr, i64, [2 x i64], [2 x i64] } @matvec(ptr %0, ptr %1, i64 %2, i
   ret { ptr, ptr, i64, [2 x i64], [2 x i64] } %51
 }
 
+define void @_mlir_ciface_matvec(ptr %0, ptr %1, ptr %2) {
+  %4 = load { ptr, ptr, i64, [2 x i64], [2 x i64] }, ptr %1, align 8
+  %5 = extractvalue { ptr, ptr, i64, [2 x i64], [2 x i64] } %4, 0
+  %6 = extractvalue { ptr, ptr, i64, [2 x i64], [2 x i64] } %4, 1
+  %7 = extractvalue { ptr, ptr, i64, [2 x i64], [2 x i64] } %4, 2
+  %8 = extractvalue { ptr, ptr, i64, [2 x i64], [2 x i64] } %4, 3, 0
+  %9 = extractvalue { ptr, ptr, i64, [2 x i64], [2 x i64] } %4, 3, 1
+  %10 = extractvalue { ptr, ptr, i64, [2 x i64], [2 x i64] } %4, 4, 0
+  %11 = extractvalue { ptr, ptr, i64, [2 x i64], [2 x i64] } %4, 4, 1
+  %12 = load { ptr, ptr, i64, [2 x i64], [2 x i64] }, ptr %2, align 8
+  %13 = extractvalue { ptr, ptr, i64, [2 x i64], [2 x i64] } %12, 0
+  %14 = extractvalue { ptr, ptr, i64, [2 x i64], [2 x i64] } %12, 1
+  %15 = extractvalue { ptr, ptr, i64, [2 x i64], [2 x i64] } %12, 2
+  %16 = extractvalue { ptr, ptr, i64, [2 x i64], [2 x i64] } %12, 3, 0
+  %17 = extractvalue { ptr, ptr, i64, [2 x i64], [2 x i64] } %12, 3, 1
+  %18 = extractvalue { ptr, ptr, i64, [2 x i64], [2 x i64] } %12, 4, 0
+  %19 = extractvalue { ptr, ptr, i64, [2 x i64], [2 x i64] } %12, 4, 1
+  %20 = call { ptr, ptr, i64, [2 x i64], [2 x i64] } @matvec(ptr %5, ptr %6, i64 %7, i64 %8, i64 %9, i64 %10, i64 %11, ptr %13, ptr %14, i64 %15, i64 %16, i64 %17, i64 %18, i64 %19)
+  store { ptr, ptr, i64, [2 x i64], [2 x i64] } %20, ptr %0, align 8
+  ret void
+}
+
 define void @main() {
+  call void @printtest()
   %1 = call ptr @malloc(i64 ptrtoint (ptr getelementptr (float, ptr null, i64 15) to i64))
   %2 = insertvalue { ptr, ptr, i64, [2 x i64], [2 x i64] } undef, ptr %1, 0
   %3 = insertvalue { ptr, ptr, i64, [2 x i64], [2 x i64] } %2, ptr %1, 1
@@ -501,6 +562,11 @@ define void @main() {
   call void @puts(ptr @assert_msg)
   call void @abort()
   unreachable
+}
+
+define void @_mlir_ciface_main() {
+  call void @main()
+  ret void
 }
 
 !llvm.module.flags = !{!0}

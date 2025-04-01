@@ -61,7 +61,7 @@ matmul-run:
 
 
 matmul-time-run:
-	@${MLIR_OPT} ./matmul-with-time.mlir \
+	@${MLIR_OPT} ./matmul-callfunc-test.mlir \
 		-convert-linalg-to-loops \
 		-convert-scf-to-cf \
 		-expand-strided-metadata \
@@ -78,22 +78,26 @@ matmul-time-run:
 
 
 matmul-time-run-aot:
-	@${MLIR_OPT} ./matmul-with-time.mlir \
+	@${MLIR_OPT} ./matmul-callfunc-test.mlir \
 		-convert-linalg-to-loops \
 		-convert-scf-to-cf \
 		-expand-strided-metadata \
 		-lower-affine \
 		-convert-arith-to-llvm \
 		-finalize-memref-to-llvm \
+		-llvm-request-c-wrappers \
 		-convert-func-to-llvm \
-		-reconcile-unrealized-casts \
-		-llvm-request-c-wrappers  | \
+		-reconcile-unrealized-casts   | \
 	${MLIR_TRANSLATE} --mlir-to-llvmir -o log.ll
 
 	${CLANG} log.ll -O3 \
 		-L${MLIR_LIB} -lmlir_runner_utils -lmlir_c_runner_utils \
+		-L/root/myproject/MLIR-Profiler/MLProfiler/build/src/  -lProfilerRuntime \
 		-o a.out
-	@LD_LIBRARY_PATH=${MLIR_LIB} ./a.out
+
+	# 导出 LD_LIBRARY_PATH 环境变量，确保运行时能找到库文件
+	@export LD_LIBRARY_PATH=${MLIR_LIB}:/root/myproject/MLIR-Profiler/MLProfiler/build/src:$LD_LIBRARY_PATH && ./a.out
+
 
 clean:
 	rm -f *.ll *.out

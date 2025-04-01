@@ -1,11 +1,10 @@
 cmake_minimum_required(VERSION 3.10)
-
+set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 project(ml-profiler)
 
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON) # 生成 compile_commands.json 便于代码高亮
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED YES)
-
 
 
 #-------------------------------------------------------------------------------
@@ -42,14 +41,24 @@ get_property(conversion_libs GLOBAL PROPERTY MLIR_CONVERSION_LIBS)
 
 add_subdirectory(examples)
 add_subdirectory(src)
+add_subdirectory(include)
 
 
-target_include_directories(profiler-main PUBLIC ${PROJECT_SOURCE_DIR}/include)
+
+target_include_directories(profiler-main 
+    PUBLIC ${PROJECT_SOURCE_DIR}/include
+    ${CMAKE_CURRENT_BINARY_DIR}/include
+    ${CMAKE_CURRENT_BINARY_DIR}/include/Dialect
+
+    )
 target_link_libraries(profiler-main
     PUBLIC
+    MLIRPROFILING
     ProfilerRuntime
     mlir_runner_utils
     mlir_c_runner_utils
     ${dialect_libs}
     ${conversion_libs}
+    
 )
+
