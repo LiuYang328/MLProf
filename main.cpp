@@ -1,7 +1,6 @@
 // #include "mlir/IR/AsmState.h"
 #include "Dialect/profiling/profilingDialect.h"
 #include "Dialect/profiling/profilingOps.h"
-#include "ml_profiler/Profiler.h"
 #include "mlir/Debug/BreakpointManager.h"
 #include "mlir/Dialect/Arith/IR/Arith.h"
 #include "mlir/Dialect/Func/IR/FuncOps.h"
@@ -15,12 +14,15 @@
 #include "mlir/InitAllDialects.h" // 包含所有内置 dialect 的注册函数
 #include "mlir/Parser/Parser.h"
 #include "mlir/Support/FileUtilities.h"
+#include "mlir_profiler/Profiler.h"
 #include "llvm/Support/Process.h"
 #include "llvm/Support/raw_ostream.h"
+#include <cstdio>
 #include <iostream>
 
-#include "ml_profiler/Profiler.h"
 #include "mlir/Pass/Pass.h"
+#include "mlir_profiler/Profiler.h"
+#include "mlir_profiler/TimeEvent.h"
 
 using namespace mlir;
 
@@ -71,6 +73,8 @@ int main(int argc, char **argv) {
   // 注册所有内置 dialect
   mlir::registerAllDialects(registry);
 
+  // mlir::func::registerAllExtensions(registry);
+
   // 用注册表初始化 MLIRContext，所有注册的 dialect 都会被载入
   mlir::MLIRContext context(registry);
   context.allowUnregisteredDialects(true);
@@ -86,65 +90,31 @@ int main(int argc, char **argv) {
 
   // insertSurroundingOps(root);
 
-  // Profiler profiler;
+  Profiler profiler;
 
-  // profiler.instrument("linalg");
+  TimeEvent event;
 
-  // 初始化 MLIR 环境。
+  TimeManager &m = profiler.getTimeManager();
+  m.timingStart(&event);
+  double timeevent =  event.getStartTimestamp();
 
-  // 构造并执行 Pass 管线。
-
-  // 与性能计数（硬件及软件）的上层模块解耦。
-
-  std::cout << "instrument" << std::endl;
-  // auto moduleOp = module.get();
-  // auto src = parseSourceFile<ModuleOp>(argv[1], &ctx);
-  std::string mlirFilePath = "/root/myproject/MLIR-Profiler/MLProfiler/"
-                             "examples/matmul-test/matmul-with-time.mlir";
-
-  auto moduleOp = mlir::parseSourceFile<mlir::ModuleOp>(mlirFilePath, &context);
-  // 提取并执行对目标方言操作的处理逻辑
-
-  mlir::OpBuilder builder(&context);
-
-  std::cout << "start walk" << std::endl;
-
-  // 遍历模块中的所有函数
-  mlir::Operation *op = moduleOp->getOperation();
-
-  // builder.create<mlir::toy::FuncOp>(location, proto.getName(), funcType);
-
-  // std::cout << "start walk" << std::endl;
-
-  // // 遍历模块中的所有函数
-  // moduleOp->walk([&](mlir::Operation *op) {
-  //   // 遍历函数体中每个操作
-
-  //   printf("Matched op: %s\n", op->getName().getStringRef().str().c_str());
-
-  //   builder.setInsertionPoint(op);
-  //   auto constantOp = builder.create<mlir::arith::ConstantOp>(
-  //       op->getLoc(), builder.getI64IntegerAttr(42));
+  std::cout << "start time: " << timeevent << std::endl;
 
 
-  // });
-  context.getOrLoadDialect<profiling::ProfilingDialect>();
+  // mlir::PassManager pm(moduleOp.get()->getName());
+  // // if (mlir::failed(mlir::applyPassManagerCLOptions(pm)))
+  // //   return 4;
+  // pm.addNestedPass<func::FuncOp>(mlir::createCanonicalizerPass());
+  // if (mlir::failed(pm.run(*moduleOp)))
+  //   std::cout << "Failed to run pass" << std::endl;
+  // else
+  //   std::cout << "Pass ran successfully" << std::endl;
 
-  moduleOp->walk([&](linalg::LinalgOp linalgOp) {
-    // 遍历函数体中每个操作
 
-    printf("Matched op: %s\n", linalgOp->getName().getStringRef().str().c_str());
-
-    builder.setInsertionPoint(linalgOp);
-    auto constantOp = builder.create<profiling::StartOp>(
-      linalgOp->getLoc());
-
-    linalgOp->dump();
-
-  });
-
+  // if (mlir::failed(moduleOp->verify()))
+  //  std::cout<<"falied"<<std::endl;
   
-  moduleOp->dump();
+  // moduleOp->dump();
 
   return 0;
 }

@@ -1,4 +1,4 @@
-#include "ml_profiler/TimeManager.h"
+#include "mlir_profiler/TimeManager.h"
 
 
 void TimeManager::processTimingData(const std::string &outputFilepath) {

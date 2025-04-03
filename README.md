@@ -15,7 +15,7 @@ ml-profiler/
 │       ├── simple_profiling.md
 │       └── custom_dialect_profiling.md
 ├── include/
-│   └── ml_profiler/
+│   └── mlir_profiler/
 │       ├── Runtime/
 │       │   ├── Profiler.h
 │       │   ├── ProfilingData.h
@@ -42,7 +42,7 @@ ml-profiler/
 │   │   ├── CallGraph.cpp
 │   │   └── TimelineView.cpp
 │   └── Tools/
-│       ├── ml_profiler.cpp
+│       ├── mlir_profiler.cpp
 │       └── profiler_cli/
 │           ├── CLI.cpp
 │           └── CLIUtils.cpp
@@ -109,7 +109,7 @@ ml-profiler/
      - **`Passes/`**: Profiling Pass的实现文件。
      - **`Interfaces/`**: Profiling接口的实现文件。
      - **`Visualization/`**: 可视化工具的实现文件。
-     - **`Tools/`**: 命令行工具的入口文件（`ml_profiler.cpp`）和CLI相关工具。
+     - **`Tools/`**: 命令行工具的入口文件（`mlir_profiler.cpp`）和CLI相关工具。
 
 #### 6. **`test/`**
    - 测试目录，分为单元测试和集成测试：

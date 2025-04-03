@@ -9,9 +9,11 @@ class TimeEvent {
 public:
   using OpPtr = mlir::Operation *;
 
+  TimeEvent() = default; // 声明默认构造函数
   TimeEvent(OpPtr opPtr)
       : opPtr(opPtr), opName(opPtr->getName().getStringRef().str()),
         startTimestamp(0), endTimestamp(0), duration(0) {}
+        
   TimeEvent(const TimeEvent &) = default;
   TimeEvent(TimeEvent &&) = default;
 

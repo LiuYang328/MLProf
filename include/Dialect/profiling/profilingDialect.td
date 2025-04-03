@@ -11,6 +11,8 @@ def Profiling_Dialect : Dialect {
   let summary = "Dialect for inserting performance profiling instrumentation";
   let cppNamespace = "::profiling";
 
+
+
 }
 
 //===----------------------------------------------------------------------===//

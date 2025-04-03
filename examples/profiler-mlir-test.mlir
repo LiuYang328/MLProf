@@ -33,6 +33,14 @@ module {
     profiler.start()
     return
     profiler.end()
+
+    call @rtclock() : () -> ()
+    
+    gpu.conv2d()
+
+    
+    call @rtclock() : () -> ()    
+
   }
 }
 

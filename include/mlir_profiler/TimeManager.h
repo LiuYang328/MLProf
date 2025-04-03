@@ -8,7 +8,7 @@
 #include <unordered_map>
 #include <vector>
 
-#include "ml_profiler/TimeEvent.h"
+#include "mlir_profiler/TimeEvent.h"
 
 // class Label {
 // public:

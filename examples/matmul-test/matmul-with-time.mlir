@@ -22,7 +22,7 @@ func.func @matmul(%A: memref<?x?xf32>, %B: memref<?x?xf32>) -> (memref<?x?xf32>)
 //   %c0 = arith.constant 0 : index
 //   %c1 = arith.constant 1 : index
 //   %f0 = arith.constant 0.0 : f32
-//   %m = memref.dim %A, %c0 : memref<?x?xf32>
+  //   %m = memref.dim %A, %c0 : memref<?x?xf32>
 //   %x = memref.dim %A, %c1 : memref<?x?xf32>
 //   %n = memref.dim %B, %c1 : memref<?x?xf32>
 //   %C = memref.alloc(%m, %n) : memref<?x?xf32>

@@ -1,7 +1,6 @@
 #ifndef ML_PROFILER_PROFILER_H
 #define ML_PROFILER_PROFILER_H
 
-
 #include "mlir/Dialect/Bufferization/Transforms/Passes.h"
 #include "mlir/Dialect/Linalg/Passes.h"
 #include "mlir/IR/Dialect.h"
@@ -19,6 +18,8 @@
 #include "llvm/Support/SourceMgr.h"
 #include "llvm/Support/ToolOutputFile.h"
 
+#include "Dialect/profiling/profilingDialect.h"
+#include "Dialect/profiling/profilingOps.h"
 #include <cstdint>
 #include <dlfcn.h> // for dlopen, dlsym, dlclose
 #include <filesystem>
@@ -28,16 +29,13 @@
 #include <string_view>
 #include <thread>
 
-#include "ml_profiler/TimeManager.h"
-
+#include "mlir_profiler/TimeManager.h"
 
 extern "C" void _mlir_ciface_timingStart(uint64_t);
 
 extern "C" void _mlir_ciface_timingEnd(uint64_t);
 
-extern "C" void _mlir_ciface_printtest() ;
-
-
+extern "C" void _mlir_ciface_printtest();
 
 class Profiler {
 
@@ -52,16 +50,11 @@ public:
 
     /*--Register dialects in custom project.--*/
 
-    // registry.insert<bud::BudDialect,
-    //                 trace::TraceDialect,
-    //                 dip::DIPDialect,
-    //                 dap::DAPDialect,
-    //                 rvv::RVVDialect,
-    //                 vector_exp::VectorExpDialect,
-    //                 gemmini::GemminiDialect,
-    //                 sche::ScheDialect>();
+    // context.getOrLoadDialect<profiling::ProfilingDialect>();
 
-    // context.appendDialectRegistry(registry);
+    registry.insert<profiling::ProfilingDialect>();
+
+    context.appendDialectRegistry(registry);
 
     /* init TimeManager */
     if (!timeManager) {
@@ -116,7 +109,5 @@ private:
 
   static std::unique_ptr<TimeManager> timeManager;
 };
-
-
 
 #endif // ML_PROFILER_PROFILER_H
