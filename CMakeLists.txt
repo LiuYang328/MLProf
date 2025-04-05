@@ -31,7 +31,6 @@ include(HandleLLVMOptions)
 include_directories(${LLVM_INCLUDE_DIRS})
 include_directories(${MLIR_INCLUDE_DIRS})
 
-add_executable(profiler-main main.cpp)
 
 # find MLIR libraries
 get_property(dialect_libs GLOBAL PROPERTY MLIR_DIALECT_LIBS)
@@ -47,8 +46,11 @@ get_property(conversion_libs GLOBAL PROPERTY MLIR_CONVERSION_LIBS)
 add_subdirectory(examples)
 add_subdirectory(src)
 add_subdirectory(include)
+# add_subdirectory(test)
 
 
+
+add_executable(profiler-main main.cpp)
 
 target_include_directories(profiler-main 
     PUBLIC ${PROJECT_SOURCE_DIR}/include
@@ -65,4 +67,5 @@ target_link_libraries(profiler-main
     ${conversion_libs}
     
 )
+
 

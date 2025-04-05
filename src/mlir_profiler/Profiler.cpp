@@ -46,27 +46,6 @@ std::string Profiler::instrument(const std::string &targetDialect) {
 
   });
 
-
-
-  // // 输出文件路径构造
-  // std::string fileName = mlirFilePath.stem();
-  // std::filesystem::path parent_directory = mlirFilePath.parent_path();
-  // std::filesystem::path new_file_path =
-  //     parent_directory / (fileName + "_instrumented.mlir");
-
-  // // 写入输出文件
-  // std::error_code errorCode;
-  // llvm::ToolOutputFile outputFile(new_file_path.string(), errorCode,
-  //                                 llvm::sys::fs::OpenFlags(1)); // OF_Text
-
-  // if (errorCode) {
-  //   llvm::errs() << "Error opening output file: " << errorCode.message()
-  //                << "\n";
-  // }
-
-  // moduleOp->print(outputFile.os());
-  // outputFile.keep();
-  // return new_file_path.string();
   moduleOp->dump();
   return "";
 }

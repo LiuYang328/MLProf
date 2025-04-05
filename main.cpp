@@ -80,25 +80,13 @@ int main(int argc, char **argv) {
   context.allowUnregisteredDialects(true);
 
   // 读入文件
-  // auto src = parseSourceFile<ModuleOp>(argv[1], &ctx);
+  auto src = parseSourceFile<ModuleOp>("/root/myproject/MLIR-Profiler/MLProfiler/examples/matmul-test/matmul-with-time.mlir", &context);
 
   // src->dump();
 
   // 在main中调用
-  // Operation *root = src->getOperation(); // 获取顶层module操作
-  // visitOperation(root);
-
-  // insertSurroundingOps(root);
-
-  Profiler profiler;
-
-  TimeEvent event;
-
-  TimeManager &m = profiler.getTimeManager();
-  m.timingStart(&event);
-  double timeevent =  event.getStartTimestamp();
-
-  std::cout << "start time: " << timeevent << std::endl;
+  Operation *root = src->getOperation(); // 获取顶层module操作
+  visitOperation(root);
 
 
   // mlir::PassManager pm(moduleOp.get()->getName());
