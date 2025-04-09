@@ -72,7 +72,7 @@ matmul-time-run:
 		-reconcile-unrealized-casts \
 		-llvm-request-c-wrappers  | \
 	${MLIR_CPU_RUNNER} ${OPT_FLAG} -e main -entry-point-result=void \
-		-shared-libs=${MLIR_RUNNER_UTILS} -shared-libs=${MLIR_C_RUNNER_UTILS}  -shared-libs=/root/myproject/MLIR-Profiler/MLProfiler/build/src/libProfilerRuntime.so 
+		-shared-libs=${MLIR_RUNNER_UTILS} -shared-libs=${MLIR_C_RUNNER_UTILS}  -shared-libs=/root/myproject/MLIR-Profiler/MLProfiler/build/src/mlir_profiler/libProfilerRuntime.so 
 
 
 
@@ -92,11 +92,10 @@ matmul-time-run-aot:
 
 	${CLANG} log.ll -O3 \
 		-L${MLIR_LIB} -lmlir_runner_utils -lmlir_c_runner_utils \
-		-L/root/myproject/MLIR-Profiler/MLProfiler/build/src/  -lProfilerRuntime \
+		-L/root/myproject/MLIR-Profiler/MLProfiler/build/src/mlir_profiler  -lProfilerRuntime \
 		-o a.out
 
-	# 导出 LD_LIBRARY_PATH 环境变量，确保运行时能找到库文件
-	@export LD_LIBRARY_PATH=${MLIR_LIB}:/root/myproject/MLIR-Profiler/MLProfiler/build/src:$LD_LIBRARY_PATH && ./a.out
+	@export LD_LIBRARY_PATH=${MLIR_LIB}:/root/myproject/MLIR-Profiler/MLProfiler/build/src/mlir_profiler:$LD_LIBRARY_PATH && ./a.out
 
 
 clean:

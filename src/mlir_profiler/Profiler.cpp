@@ -53,11 +53,11 @@ std::string Profiler::instrument(const std::string &targetDialect) {
 
 
 void _mlir_ciface_timingStart(uint64_t ptr) {
-  // Profiler::getTimeManager().timingStart(reinterpret_cast<TimeEvent *>(ptr));
+  Profiler::getTimeManager().timingStart(reinterpret_cast<TimeEvent *>(ptr));
 }
 
 void _mlir_ciface_timingEnd(uint64_t ptr) {
-  // Profiler::getTimeManager().timingEnd(reinterpret_cast<TimeEvent *>(ptr));
+  Profiler::getTimeManager().timingEnd(reinterpret_cast<TimeEvent *>(ptr));
 }
 
 

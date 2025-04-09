@@ -19,6 +19,7 @@ target_include_directories(test
     )
 target_link_libraries(test
     PUBLIC
+    compileUtils
     ProfilerRuntime
     mlir_runner_utils
     mlir_c_runner_utils

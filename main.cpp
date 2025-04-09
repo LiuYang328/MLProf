@@ -11,6 +11,8 @@
 #include "mlir/IR/DialectRegistry.h"
 #include "mlir/IR/MLIRContext.h"
 #include "mlir/IR/Operation.h"
+#include "mlir/IR/Value.h"
+#include "mlir/IR/ValueRange.h"
 #include "mlir/InitAllDialects.h" // 包含所有内置 dialect 的注册函数
 #include "mlir/Parser/Parser.h"
 #include "mlir/Support/FileUtilities.h"
@@ -80,7 +82,10 @@ int main(int argc, char **argv) {
   context.allowUnregisteredDialects(true);
 
   // 读入文件
-  auto src = parseSourceFile<ModuleOp>("/root/myproject/MLIR-Profiler/MLProfiler/examples/matmul-test/matmul-with-time.mlir", &context);
+  auto src =
+      parseSourceFile<ModuleOp>("/root/myproject/MLIR-Profiler/MLProfiler/"
+                                "examples/matmul-test/matmul-with-time.mlir",
+                                &context);
 
   // src->dump();
 
@@ -88,6 +93,24 @@ int main(int argc, char **argv) {
   Operation *root = src->getOperation(); // 获取顶层module操作
   visitOperation(root);
 
+  mlir::OpBuilder builder(&context);
+
+  // builder.setInsertionPoint(root);
+  builder.setInsertionPointToEnd(src->getBody());
+
+  // auto loc = src->getLoc();
+  auto loc = builder.getUnknownLoc();
+
+  auto elementType = builder.getF32Type();
+  auto printInputType = UnrankedTensorType::get(elementType);
+  auto printFunTy =
+      builder.getFunctionType(TypeRange{printInputType}, TypeRange{});
+  auto printfunc =
+      builder.create<func::FuncOp>(loc, "printMemrefF32", printFunTy);
+
+  printfunc.setPrivate();
+
+  // builder.create<func::CallOp>(loc, printfunc);
 
   // mlir::PassManager pm(moduleOp.get()->getName());
   // // if (mlir::failed(mlir::applyPassManagerCLOptions(pm)))
@@ -98,11 +121,10 @@ int main(int argc, char **argv) {
   // else
   //   std::cout << "Pass ran successfully" << std::endl;
 
-
   // if (mlir::failed(moduleOp->verify()))
   //  std::cout<<"falied"<<std::endl;
-  
-  // moduleOp->dump();
+
+  src->dump();
 
   return 0;
 }
