@@ -18,8 +18,8 @@
 #include "llvm/Support/SourceMgr.h"
 #include "llvm/Support/ToolOutputFile.h"
 
-#include "Dialect/profiling/profilingDialect.h"
-#include "Dialect/profiling/profilingOps.h"
+// #include "Dialect/profiling/profilingDialect.h"
+// #include "Dialect/profiling/profilingOps.h"
 #include <cstdint>
 #include <dlfcn.h> // for dlopen, dlsym, dlclose
 #include <filesystem>
@@ -40,7 +40,7 @@ extern "C" void _mlir_ciface_printtest();
 class Profiler {
 
 public:
-  Profiler() {
+  Profiler(std::filesystem::path mlirFilePath) : mlirFilePath(mlirFilePath) {
     /* init MLIRContext */
     mlir::DialectRegistry registry;
     // Register all MLIR core dialects.
@@ -52,7 +52,7 @@ public:
 
     // context.getOrLoadDialect<profiling::ProfilingDialect>();
 
-    registry.insert<profiling::ProfilingDialect>();
+    // registry.insert<profiling::ProfilingDialect>();
 
     context.appendDialectRegistry(registry);
 
@@ -105,7 +105,7 @@ private:
 private:
   mlir::MLIRContext context;
 
-  // std::filesystem::path mlirFilePath;
+  std::filesystem::path mlirFilePath;
 
   static std::unique_ptr<TimeManager> timeManager;
 };

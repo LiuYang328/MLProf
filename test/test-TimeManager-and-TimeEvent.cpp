@@ -1,5 +1,3 @@
-#include "Dialect/profiling/profilingDialect.h"
-#include "Dialect/profiling/profilingOps.h"
 #include "Utils/compileUtils.h"
 #include "Utils/logger.h"
 #include "mlir/Debug/BreakpointManager.h"
@@ -30,7 +28,7 @@
 // 封装 test-TimeManager-and-TimeEvent.cpp 中的测试逻辑
 void testTimeManagerAndTimeEvent() {
 
-  Profiler profiler;
+  Profiler profiler("/home/liuyang/project/mlir-profiler/buddy-mlir/examples/profiler-lenet/log.mlir");
 
   TimeEvent event;
 

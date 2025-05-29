@@ -6,8 +6,8 @@ include_directories(${CMAKE_CURRENT_BINARY_DIR}/include/Dialect)
 
 
 
-add_subdirectory(Dialect)
-add_subdirectory(Conversion)
+# add_subdirectory(Dialect)
+# add_subdirectory(Conversion)
 add_subdirectory(mlir_profiler)
 add_subdirectory(Utils)
 

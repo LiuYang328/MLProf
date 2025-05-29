@@ -16,10 +16,10 @@ target_include_directories(ProfilerRuntime
 
 target_link_libraries(ProfilerRuntime
     PUBLIC
-    MLIRPROFILING
+    # MLIRPROFILING
     mlir_c_runner_utils
     mlir_runner_utils
-    profilingpass
+    # profilingpass
 
     ${dialect_libs}
     ${conversion_libs}

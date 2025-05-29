@@ -11,8 +11,8 @@ set(CMAKE_CXX_STANDARD_REQUIRED YES)
 #-------------------------------------------------------------------------------
 # MLIR/LLVM Configuration
 #-------------------------------------------------------------------------------
-set(MLIR_DIR /root/third-lib/llvm-project/build-19.1.7/lib/cmake/mlir)
-set(LLVM_DIR /root/third-lib/llvm-project/build-19.1.7/lib/cmake/llvm)
+set(MLIR_DIR /home/liuyang/project/mlir-profiler/buddy-mlir/llvm/build/lib/cmake/mlir)
+set(LLVM_DIR //home/liuyang/project/mlir-profiler/buddy-mlir/llvm/build/lib/cmake/llvm)
 
 find_package(MLIR REQUIRED CONFIG)
 
