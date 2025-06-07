@@ -68,7 +68,6 @@ target_link_libraries(profiler-main
 )
 
 
-
 set_target_properties(profiler-main PROPERTIES
-    RUNTIME_OUTPUT_DIRECTORY /root/repos/MLProf/examples/LeNet
+    RUNTIME_OUTPUT_DIRECTORY examples/LeNet
 )

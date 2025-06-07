@@ -46,7 +46,7 @@ int main() {
   /* init Profiler */
   std::cout << "Initializing profiler..." << std::endl;
   Profiler profiler(
-    "/root/repos/MLProf/examples/LeNet/lenet-test.mlir");
+    "examples/LeNet/lenet-test.mlir");
     
   std::cout << "Starting instrumentation..." << std::endl;
   profiler.instrument("tosa");
