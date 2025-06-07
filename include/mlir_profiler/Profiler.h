@@ -91,9 +91,9 @@ public:
     return fptr;
   }
 
-  // void outputResult(const std::string &resultFilepath) {
-  //   timeManager->processTimingData(resultFilepath);
-  // }
+  void outputResult(const std::string &resultFilepath) {
+    timeManager->processTimingData(resultFilepath);
+  }
 
   static TimeManager &getTimeManager() { return *timeManager; }
 

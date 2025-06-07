@@ -1,29 +1,26 @@
 module {
-  func.func private @printMemrefF32(%ptr : tensor<*xf32>)
-  func.func private @rtclock() -> f64
 
   func.func @forward() {
+    %fake_params = arith.constant dense<1.0> : tensor<44426xf32>
+    %fake_input = arith.constant dense<2.0> : tensor<1x1x28x28xf32>
 
-    %arg0 = arith.constant dense<1.0> : tensor<44426xf32>
-    %arg1 = arith.constant dense<2.0> : tensor<1x1x28x28xf32>
-    
-    %extracted_slice = tensor.extract_slice %arg0[0] [150] [1] : tensor<44426xf32> to tensor<150xf32>
-    %expanded = tensor.expand_shape %extracted_slice [[0, 1, 2, 3]] output_shape [6,1,5,5] : tensor<150xf32> into tensor<6x1x5x5xf32>
-    %extracted_slice_0 = tensor.extract_slice %arg0[150] [6] [1] : tensor<44426xf32> to tensor<6xf32>
-    %extracted_slice_1 = tensor.extract_slice %arg0[156] [2400] [1] : tensor<44426xf32> to tensor<2400xf32>
-    %expanded_2 = tensor.expand_shape %extracted_slice_1 [[0, 1, 2, 3]] output_shape [16,6,5,5]: tensor<2400xf32> into tensor<16x6x5x5xf32>
-    %extracted_slice_3 = tensor.extract_slice %arg0[2556] [16] [1] : tensor<44426xf32> to tensor<16xf32>
-    %extracted_slice_4 = tensor.extract_slice %arg0[2572] [30720] [1] : tensor<44426xf32> to tensor<30720xf32>
-    %expanded_5 = tensor.expand_shape %extracted_slice_4 [[0, 1]] output_shape [120,256] : tensor<30720xf32> into tensor<120x256xf32>
-    %extracted_slice_6 = tensor.extract_slice %arg0[33292] [120] [1] : tensor<44426xf32> to tensor<120xf32>
-    %extracted_slice_7 = tensor.extract_slice %arg0[33412] [10080] [1] : tensor<44426xf32> to tensor<10080xf32>
-    %expanded_8 = tensor.expand_shape %extracted_slice_7 [[0, 1]] output_shape [84,120] : tensor<10080xf32> into tensor<84x120xf32>
-    %extracted_slice_9 = tensor.extract_slice %arg0[43492] [84] [1] : tensor<44426xf32> to tensor<84xf32>
-    %extracted_slice_10 = tensor.extract_slice %arg0[43576] [840] [1] : tensor<44426xf32> to tensor<840xf32>
-    %expanded_11 = tensor.expand_shape %extracted_slice_10 [[0, 1]] output_shape [10,84] : tensor<840xf32> into tensor<10x84xf32>
-    %extracted_slice_12 = tensor.extract_slice %arg0[44416] [10] [1] : tensor<44426xf32> to tensor<10xf32>
+    %extracted_slice = tensor.extract_slice %fake_params[0] [150] [1] : tensor<44426xf32> to tensor<150xf32>
+    %expanded = tensor.expand_shape %extracted_slice [[0, 1, 2, 3]] : tensor<150xf32> into tensor<6x1x5x5xf32>
+    %extracted_slice_0 = tensor.extract_slice %fake_params[150] [6] [1] : tensor<44426xf32> to tensor<6xf32>
+    %extracted_slice_1 = tensor.extract_slice %fake_params[156] [2400] [1] : tensor<44426xf32> to tensor<2400xf32>
+    %expanded_2 = tensor.expand_shape %extracted_slice_1 [[0, 1, 2, 3]] : tensor<2400xf32> into tensor<16x6x5x5xf32>
+    %extracted_slice_3 = tensor.extract_slice %fake_params[2556] [16] [1] : tensor<44426xf32> to tensor<16xf32>
+    %extracted_slice_4 = tensor.extract_slice %fake_params[2572] [30720] [1] : tensor<44426xf32> to tensor<30720xf32>
+    %expanded_5 = tensor.expand_shape %extracted_slice_4 [[0, 1]] : tensor<30720xf32> into tensor<120x256xf32>
+    %extracted_slice_6 = tensor.extract_slice %fake_params[33292] [120] [1] : tensor<44426xf32> to tensor<120xf32>
+    %extracted_slice_7 = tensor.extract_slice %fake_params[33412] [10080] [1] : tensor<44426xf32> to tensor<10080xf32>
+    %expanded_8 = tensor.expand_shape %extracted_slice_7 [[0, 1]] : tensor<10080xf32> into tensor<84x120xf32>
+    %extracted_slice_9 = tensor.extract_slice %fake_params[43492] [84] [1] : tensor<44426xf32> to tensor<84xf32>
+    %extracted_slice_10 = tensor.extract_slice %fake_params[43576] [840] [1] : tensor<44426xf32> to tensor<840xf32>
+    %expanded_11 = tensor.expand_shape %extracted_slice_10 [[0, 1]] : tensor<840xf32> into tensor<10x84xf32>
+    %extracted_slice_12 = tensor.extract_slice %fake_params[44416] [10] [1] : tensor<44426xf32> to tensor<10xf32>
     %0 = "tosa.const"() <{value = dense<[0, 2, 3, 1]> : tensor<4xi32>}> : () -> tensor<4xi32>
-    %1 = tosa.transpose %arg1, %0 : (tensor<1x1x28x28xf32>, tensor<4xi32>) -> tensor<1x28x28x1xf32>
+    %1 = tosa.transpose %fake_input, %0 : (tensor<1x1x28x28xf32>, tensor<4xi32>) -> tensor<1x28x28x1xf32>
     %2 = "tosa.const"() <{value = dense<[0, 2, 3, 1]> : tensor<4xi32>}> : () -> tensor<4xi32>
     %3 = tosa.transpose %expanded, %2 : (tensor<6x1x5x5xf32>, tensor<4xi32>) -> tensor<6x5x5x1xf32>
     %4 = tosa.conv2d %1, %3, %extracted_slice_0 {dilation = array<i64: 1, 1>, pad = array<i64: 0, 0, 0, 0>, stride = array<i64: 1, 1>} : (tensor<1x28x28x1xf32>, tensor<6x5x5x1xf32>, tensor<6xf32>) -> tensor<1x24x24x6xf32>
@@ -79,14 +76,7 @@ module {
     %54 = tosa.reshape %53 {new_shape = array<i64: 1, 10>} : (tensor<1x1x10xf32>) -> tensor<1x10xf32>
     %55 = tosa.reshape %extracted_slice_12 {new_shape = array<i64: 1, 10>} : (tensor<10xf32>) -> tensor<1x10xf32>
     %56 = tosa.add %55, %54 : (tensor<1x10xf32>, tensor<1x10xf32>) -> tensor<1x10xf32>
-
-    %tensor_unranked = tensor.cast %56 : tensor<1x10xf32> to tensor<*xf32>
-    
-    call @printMemrefF32(%tensor_unranked) : (tensor<*xf32>) -> ()
-
-    %time = arith.subf %t_end, %t_start : f64
-    vector.print %time : f64
+    return 
 
   }
-
 }

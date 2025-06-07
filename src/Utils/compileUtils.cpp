@@ -146,10 +146,10 @@ void myutils::CompileUtils::ObjectBufferToExecutable(std::string targetName) {
       llvm::StringRef(this->buffer.data(), this->buffer.size()),
       "inMemoryObjectBuffer", false);
 
-  auto flag = lld::elf::link(objBuffer.get(), args, llvm::outs(), llvm::errs());
-  if (!flag) {
-    log(LogLevel::ERROR, "Linking failed.");
-  }
+  // auto flag = lld::elf::link(objBuffer.get(), args, llvm::outs(), llvm::errs());
+  // if (!flag) {
+  //   log(LogLevel::ERROR, "Linking failed.");
+  // }
 }
 
 void myutils::CompileUtils::compile() {

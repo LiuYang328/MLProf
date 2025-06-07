@@ -41,13 +41,34 @@ extern "C" void _mlir_ciface_forward();
 
 int main() {
   // Print the title of this example.
-
+  std::cout << "=== MLProf LeNet Example ===" << std::endl;
 
   /* init Profiler */
+  std::cout << "Initializing profiler..." << std::endl;
   Profiler profiler(
-    "/home/liuyang/project/mlir-profiler/buddy-mlir/examples/profiler-lenet/log.mlir");
+    "/root/repos/MLProf/examples/LeNet/lenet-test.mlir");
     
-  std::cout << "start instrument"<< std::endl;
+  std::cout << "Starting instrumentation..." << std::endl;
+  profiler.instrument("tosa");
+  std::cout << "Compiling MLIR code..." << std::endl;
+  profiler.compile("examples");
 
+  /* define MLIR Function type */
+  typedef void (*MLIRFuncType)( );
+
+  /* Load Shared Library */
+  std::cout << "Loading shared library..." << std::endl;
+  MLIRFuncType _mlir_ciface_forward =
+      profiler.loadLib<MLIRFuncType>("libexamples.so", "_mlir_ciface_forward");
+
+  std::cout << "Executing forward pass..." << std::endl;
+  _mlir_ciface_forward( );
+  std::cout << "Forward pass completed." << std::endl;
+
+  std::cout << "Saving profiling results to result.json..." << std::endl;
+  profiler.outputResult("result.json");
+  std::cout << "Results have been saved successfully." << std::endl;
+
+  std::cout << "Program execution completed successfully." << std::endl;
   return 0;
 }

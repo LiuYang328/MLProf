@@ -30,8 +30,8 @@ target_link_libraries(compileUtils
     MLIRFuncAllExtensions
     MLIRSPIRVTranslateRegistration
     MLIRLLVMIRToLLVMTranslation
-    lldELF
     lldCommon
+    lldELF
     ${dialect_libs}
     ${conversion_libs}
     profilerlogger

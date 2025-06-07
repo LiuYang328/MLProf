@@ -29,7 +29,10 @@ public:
 
   void timingStart(TimeEvent *e) { (*e).setStartTimestamp(); }
 
-  void timingEnd(TimeEvent *e) { (*e).setEndTimestamp(); }
+  void timingEnd(TimeEvent *e) {
+    (*e).setEndTimestamp();
+    (*e).updateDuration();
+  }
 
   // add timeEvent
   void addEvent(TimeEvent *event) { events.push_back(event); }

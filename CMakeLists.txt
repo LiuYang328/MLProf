@@ -6,13 +6,13 @@ set(CMAKE_EXPORT_COMPILE_COMMANDS ON) # 生成 compile_commands.json 便于代�
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED YES)
 
-
+set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 
 #-------------------------------------------------------------------------------
 # MLIR/LLVM Configuration
 #-------------------------------------------------------------------------------
-set(MLIR_DIR /home/liuyang/project/mlir-profiler/buddy-mlir/llvm/build/lib/cmake/mlir)
-set(LLVM_DIR //home/liuyang/project/mlir-profiler/buddy-mlir/llvm/build/lib/cmake/llvm)
+set(MLIR_DIR /root/repos/MLProf/llvm/build-6c59f0e1b0fb/lib/cmake/mlir)
+set(LLVM_DIR /root/repos/MLProf/llvm/build-6c59f0e1b0fb/lib/cmake/llvm)
 
 find_package(MLIR REQUIRED CONFIG)
 
@@ -68,3 +68,7 @@ target_link_libraries(profiler-main
 )
 
 
+
+set_target_properties(profiler-main PROPERTIES
+    RUNTIME_OUTPUT_DIRECTORY /root/repos/MLProf/examples/LeNet
+)

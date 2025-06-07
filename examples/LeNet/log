@@ -1,0 +1,494 @@
+=== MLProf LeNet Example ===
+Initializing profiler...
+Starting instrumentation...
+Compiling MLIR code...
+Converting TOSA to Linalg and lowering to LLVM IR...
+/root/repos/MLProf/llvm/build-6c59f0e1b0fb/bin/mlir-opt /root/repos/MLProf/examples/LeNet/lenet-test_instrumented.mlir \
+	-pass-pipeline "builtin.module(func.func(tosa-to-linalg-named, tosa-to-linalg, tosa-to-tensor, tosa-to-arith))"| \
+/root/repos/MLProf/llvm/build-6c59f0e1b0fb/bin/mlir-opt \
+	-convert-tensor-to-linalg \
+	-linalg-bufferize \
+	-convert-linalg-to-affine-loops \
+	-lower-affine \
+	-func-bufferize \
+	-arith-bufferize \
+	-tensor-bufferize \
+	-llvm-request-c-wrappers\
+	-convert-vector-to-scf \
+	-expand-strided-metadata \
+	-convert-vector-to-llvm \
+	-convert-arith-to-llvm \
+	-finalize-memref-to-llvm \
+	-convert-scf-to-cf \
+	-convert-arith-to-llvm \
+	-convert-func-to-llvm \
+	-reconcile-unrealized-casts | \
+ 	/root/repos/MLProf/llvm/build-6c59f0e1b0fb/bin/mlir-translate -mlir-to-llvmir| \
+ 	/root/repos/MLProf/llvm/build-6c59f0e1b0fb/bin/llvm-as | \
+/root/repos/MLProf/llvm/build-6c59f0e1b0fb/bin/llc -filetype=obj -relocation-model=pic -O0 -o ../../build/examples/LeNet/examples.o
+/root/repos/MLProf/llvm/build-6c59f0e1b0fb/bin/clang++ -shared -o libexamples.so ../../build/examples/LeNet/examples.o  /root/repos/MLProf/build/src/mlir_profiler/libProfilerRuntime.so 
+Shared examples library compiled successfully.
+Loading shared library...
+Load success!
+Executing forward pass...
+setStartTimestamp
+time: 1749285357675812
+1.74929e+15
+setEndTimestamp
+time: 1749285357675862
+1.74929e+15
+setStartTimestamp
+time: 1749285357675881
+1.74929e+15
+setEndTimestamp
+time: 1749285357675898
+1.74929e+15
+setStartTimestamp
+time: 1749285357675914
+1.74929e+15
+setEndTimestamp
+time: 1749285357675933
+1.74929e+15
+setStartTimestamp
+time: 1749285357675950
+1.74929e+15
+setEndTimestamp
+time: 1749285357675977
+1.74929e+15
+setStartTimestamp
+time: 1749285357675995
+1.74929e+15
+setEndTimestamp
+time: 1749285357677447
+1.74929e+15
+setStartTimestamp
+time: 1749285357677466
+1.74929e+15
+setEndTimestamp
+time: 1749285357677482
+1.74929e+15
+setStartTimestamp
+time: 1749285357677499
+1.74929e+15
+setEndTimestamp
+time: 1749285357677555
+1.74929e+15
+setStartTimestamp
+time: 1749285357677573
+1.74929e+15
+setEndTimestamp
+time: 1749285357677589
+1.74929e+15
+setStartTimestamp
+time: 1749285357677605
+1.74929e+15
+setEndTimestamp
+time: 1749285357677695
+1.74929e+15
+setStartTimestamp
+time: 1749285357677713
+1.74929e+15
+setEndTimestamp
+time: 1749285357677729
+1.74929e+15
+setStartTimestamp
+time: 1749285357677745
+1.74929e+15
+setEndTimestamp
+time: 1749285357677803
+1.74929e+15
+setStartTimestamp
+time: 1749285357677822
+1.74929e+15
+setEndTimestamp
+time: 1749285357677919
+1.74929e+15
+setStartTimestamp
+time: 1749285357677936
+1.74929e+15
+setEndTimestamp
+time: 1749285357677952
+1.74929e+15
+setStartTimestamp
+time: 1749285357677968
+1.74929e+15
+setEndTimestamp
+time: 1749285357677998
+1.74929e+15
+setStartTimestamp
+time: 1749285357678014
+1.74929e+15
+setEndTimestamp
+time: 1749285357678030
+1.74929e+15
+setStartTimestamp
+time: 1749285357678051
+1.74929e+15
+setEndTimestamp
+time: 1749285357678079
+1.74929e+15
+setStartTimestamp
+time: 1749285357678097
+1.74929e+15
+setEndTimestamp
+time: 1749285357678113
+1.74929e+15
+setStartTimestamp
+time: 1749285357678129
+1.74929e+15
+setEndTimestamp
+time: 1749285357678182
+1.74929e+15
+setStartTimestamp
+time: 1749285357678197
+1.74929e+15
+setEndTimestamp
+time: 1749285357679170
+1.74929e+15
+setStartTimestamp
+time: 1749285357679175
+1.74929e+15
+setEndTimestamp
+time: 1749285357679182
+1.74929e+15
+setStartTimestamp
+time: 1749285357679188
+1.74929e+15
+setEndTimestamp
+time: 1749285357679198
+1.74929e+15
+setStartTimestamp
+time: 1749285357679204
+1.74929e+15
+setEndTimestamp
+time: 1749285357679209
+1.74929e+15
+setStartTimestamp
+time: 1749285357679217
+1.74929e+15
+setEndTimestamp
+time: 1749285357679230
+1.74929e+15
+setStartTimestamp
+time: 1749285357679236
+1.74929e+15
+setEndTimestamp
+time: 1749285357679244
+1.74929e+15
+setStartTimestamp
+time: 1749285357679249
+1.74929e+15
+setEndTimestamp
+time: 1749285357679259
+1.74929e+15
+setStartTimestamp
+time: 1749285357679267
+1.74929e+15
+setEndTimestamp
+time: 1749285357679287
+1.74929e+15
+setStartTimestamp
+time: 1749285357679296
+1.74929e+15
+setEndTimestamp
+time: 1749285357679302
+1.74929e+15
+setStartTimestamp
+time: 1749285357679308
+1.74929e+15
+setEndTimestamp
+time: 1749285357679314
+1.74929e+15
+setStartTimestamp
+time: 1749285357679320
+1.74929e+15
+setEndTimestamp
+time: 1749285357679329
+1.74929e+15
+setStartTimestamp
+time: 1749285357679334
+1.74929e+15
+setEndTimestamp
+time: 1749285357679339
+1.74929e+15
+setStartTimestamp
+time: 1749285357679345
+1.74929e+15
+setEndTimestamp
+time: 1749285357679487
+1.74929e+15
+setStartTimestamp
+time: 1749285357679493
+1.74929e+15
+setEndTimestamp
+time: 1749285357679498
+1.74929e+15
+setStartTimestamp
+time: 1749285357679504
+1.74929e+15
+setEndTimestamp
+time: 1749285357679509
+1.74929e+15
+setStartTimestamp
+time: 1749285357679517
+1.74929e+15
+setEndTimestamp
+time: 1749285357679631
+1.74929e+15
+setStartTimestamp
+time: 1749285357679636
+1.74929e+15
+setEndTimestamp
+time: 1749285357679643
+1.74929e+15
+setStartTimestamp
+time: 1749285357679649
+1.74929e+15
+setEndTimestamp
+time: 1749285357679654
+1.74929e+15
+setStartTimestamp
+time: 1749285357679660
+1.74929e+15
+setEndTimestamp
+time: 1749285357679667
+1.74929e+15
+setStartTimestamp
+time: 1749285357679673
+1.74929e+15
+setEndTimestamp
+time: 1749285357679678
+1.74929e+15
+setStartTimestamp
+time: 1749285357679686
+1.74929e+15
+setEndTimestamp
+time: 1749285357679693
+1.74929e+15
+setStartTimestamp
+time: 1749285357679698
+1.74929e+15
+setEndTimestamp
+time: 1749285357679706
+1.74929e+15
+setStartTimestamp
+time: 1749285357679712
+1.74929e+15
+setEndTimestamp
+time: 1749285357679758
+1.74929e+15
+setStartTimestamp
+time: 1749285357679767
+1.74929e+15
+setEndTimestamp
+time: 1749285357679773
+1.74929e+15
+setStartTimestamp
+time: 1749285357679778
+1.74929e+15
+setEndTimestamp
+time: 1749285357679784
+1.74929e+15
+setStartTimestamp
+time: 1749285357679792
+1.74929e+15
+setEndTimestamp
+time: 1749285357679835
+1.74929e+15
+setStartTimestamp
+time: 1749285357679840
+1.74929e+15
+setEndTimestamp
+time: 1749285357679847
+1.74929e+15
+setStartTimestamp
+time: 1749285357679853
+1.74929e+15
+setEndTimestamp
+time: 1749285357679858
+1.74929e+15
+setStartTimestamp
+time: 1749285357679870
+1.74929e+15
+setEndTimestamp
+time: 1749285357679876
+1.74929e+15
+setStartTimestamp
+time: 1749285357679881
+1.74929e+15
+setEndTimestamp
+time: 1749285357679888
+1.74929e+15
+setStartTimestamp
+time: 1749285357679894
+1.74929e+15
+setEndTimestamp
+time: 1749285357679900
+1.74929e+15
+setStartTimestamp
+time: 1749285357679908
+1.74929e+15
+setEndTimestamp
+time: 1749285357679913
+1.74929e+15
+setStartTimestamp
+time: 1749285357679919
+1.74929e+15
+setEndTimestamp
+time: 1749285357679928
+1.74929e+15
+setStartTimestamp
+time: 1749285357679935
+1.74929e+15
+setEndTimestamp
+time: 1749285357679940
+1.74929e+15
+setStartTimestamp
+time: 1749285357679946
+1.74929e+15
+setEndTimestamp
+time: 1749285357679954
+1.74929e+15
+setStartTimestamp
+time: 1749285357679960
+1.74929e+15
+setEndTimestamp
+time: 1749285357679971
+1.74929e+15
+setStartTimestamp
+time: 1749285357679976
+1.74929e+15
+setEndTimestamp
+time: 1749285357679982
+1.74929e+15
+setStartTimestamp
+time: 1749285357679989
+1.74929e+15
+setEndTimestamp
+time: 1749285357679995
+1.74929e+15
+setStartTimestamp
+time: 1749285357680000
+1.74929e+15
+setEndTimestamp
+time: 1749285357680006
+1.74929e+15
+Forward pass completed.
+Saving profiling results to result.json...
+57
+tosa.const
+OP name: tosa.const duration: 50
+tosa.transpose
+OP name: tosa.transpose duration: 17
+tosa.const
+OP name: tosa.const duration: 19
+tosa.transpose
+OP name: tosa.transpose duration: 27
+tosa.conv2d
+OP name: tosa.conv2d duration: 1452
+tosa.const
+OP name: tosa.const duration: 16
+tosa.transpose
+OP name: tosa.transpose duration: 56
+tosa.const
+OP name: tosa.const duration: 16
+tosa.maximum
+OP name: tosa.maximum duration: 90
+tosa.const
+OP name: tosa.const duration: 16
+tosa.transpose
+OP name: tosa.transpose duration: 58
+tosa.max_pool2d
+OP name: tosa.max_pool2d duration: 97
+tosa.const
+OP name: tosa.const duration: 16
+tosa.transpose
+OP name: tosa.transpose duration: 30
+tosa.const
+OP name: tosa.const duration: 16
+tosa.transpose
+OP name: tosa.transpose duration: 28
+tosa.const
+OP name: tosa.const duration: 16
+tosa.transpose
+OP name: tosa.transpose duration: 53
+tosa.conv2d
+OP name: tosa.conv2d duration: 973
+tosa.const
+OP name: tosa.const duration: 7
+tosa.transpose
+OP name: tosa.transpose duration: 10
+tosa.const
+OP name: tosa.const duration: 5
+tosa.maximum
+OP name: tosa.maximum duration: 13
+tosa.const
+OP name: tosa.const duration: 8
+tosa.transpose
+OP name: tosa.transpose duration: 10
+tosa.max_pool2d
+OP name: tosa.max_pool2d duration: 20
+tosa.const
+OP name: tosa.const duration: 6
+tosa.transpose
+OP name: tosa.transpose duration: 6
+tosa.reshape
+OP name: tosa.reshape duration: 9
+tosa.const
+OP name: tosa.const duration: 5
+tosa.transpose
+OP name: tosa.transpose duration: 142
+tosa.reshape
+OP name: tosa.reshape duration: 5
+tosa.reshape
+OP name: tosa.reshape duration: 5
+tosa.matmul
+OP name: tosa.matmul duration: 114
+tosa.reshape
+OP name: tosa.reshape duration: 7
+tosa.reshape
+OP name: tosa.reshape duration: 5
+tosa.add
+OP name: tosa.add duration: 7
+tosa.const
+OP name: tosa.const duration: 5
+tosa.maximum
+OP name: tosa.maximum duration: 7
+tosa.const
+OP name: tosa.const duration: 8
+tosa.transpose
+OP name: tosa.transpose duration: 46
+tosa.reshape
+OP name: tosa.reshape duration: 6
+tosa.reshape
+OP name: tosa.reshape duration: 6
+tosa.matmul
+OP name: tosa.matmul duration: 43
+tosa.reshape
+OP name: tosa.reshape duration: 7
+tosa.reshape
+OP name: tosa.reshape duration: 5
+tosa.add
+OP name: tosa.add duration: 6
+tosa.const
+OP name: tosa.const duration: 7
+tosa.maximum
+OP name: tosa.maximum duration: 6
+tosa.const
+OP name: tosa.const duration: 5
+tosa.transpose
+OP name: tosa.transpose duration: 9
+tosa.reshape
+OP name: tosa.reshape duration: 5
+tosa.reshape
+OP name: tosa.reshape duration: 8
+tosa.matmul
+OP name: tosa.matmul duration: 11
+tosa.reshape
+OP name: tosa.reshape duration: 6
+tosa.reshape
+OP name: tosa.reshape duration: 6
+tosa.add
+OP name: tosa.add duration: 6
+Results have been saved successfully.
+Program execution completed successfully.
